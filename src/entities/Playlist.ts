@@ -3,6 +3,7 @@ export interface Playlist {
   name: string
   items: PlaylistItem[]
   userId: number
+  createdAt: Date
 }
 
 export interface PlaylistItem {

@@ -20,7 +20,7 @@ export interface ServiceResponse {
 
 export const INTERNAL_RESPONSE: ServiceResponse = {
   ok: false,
-  message: "Something went wrong",
+  message: "Something went wrong. Try again later.",
   data: null,
   internal: true
 }

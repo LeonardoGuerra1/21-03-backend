@@ -44,10 +44,10 @@ router.put("/change-name", middlewareAuth, async (req, res) => {
   res.status(status).send(result)
 })
 
-router.post("/clean", middlewareAuth, async (req, res) => {
+router.put("/clean", middlewareAuth, async (req, res) => {
   const { userId } = req as any
-  const { id } = req.body
-  const result = await cleanPlaylist(id as string, userId)
+  const { playlistId } = req.body
+  const result = await cleanPlaylist(playlistId, userId)
   const status = getStatus(result)
   res.status(status).send(result)
 })

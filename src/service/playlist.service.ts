@@ -30,6 +30,15 @@ export const findPlaylist = async (id: string, userId: string): Promise<ServiceR
 
 export const createPlaylist = async (item: Playlist, userId: number): Promise<ServiceResponse> => {
   try {
+    const found = await PlaylistModel.findOne({ name: item.name })
+    if (found !== null ) {
+      return {
+        ok: false,
+        message: "Playlist already exists.",
+        data: null
+      }
+    }
+
     const newPlaylist = new PlaylistModel({
       name: item.name,
       items: item.items,
@@ -120,14 +129,14 @@ export const addItemToPlaylist = async (playlistId: string, item: PlaylistItem, 
 export const removeItemFromPlaylist = async (playlistId: string, itemId: string, userId: string): Promise<ServiceResponse> => {
   try {
     const found = await PlaylistModel.findOne({ _id: playlistId, userId })
-    if (found === null || !found.items.some(i => i._id.toString("hex") === itemId))
+    if (found === null || !found.items.some(i => i.s_id === itemId))
       return {
         ok: false,
         message: "Unable to remove item",
         data: null
       }
 
-    const filtered = found.items.filter(i => i._id.toString("hex") !== itemId)
+    const filtered = found.items.filter(i => i.s_id !== itemId)
     const result = await PlaylistModel.updateOne({ _id: playlistId }, { items: filtered })
     const success = result.modifiedCount === 1
 

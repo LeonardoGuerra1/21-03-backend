@@ -8,17 +8,17 @@ export const login = async (email: string, password: string): Promise<ServiceRes
   try {
     const q = "select id, username, password from users where email = ? limit 1"
     const [rows] = await pool.query<any[]>(q, [email])
-    
-    // if (rows.length === 0) {
-    //   return {
-    //     ok: false,
-    //     message: "Not found",
-    //     data: null
-    //   }
-    // }
 
     const con = await pool.getConnection()
     con.release()
+
+    if (rows.length === 0) {
+      return {
+        ok: false,
+        message: "Invalid credentials",
+        data: null
+      }
+    }
 
     const found = rows[0]
     const isMatch = await bcryptjs.compare(password, found.password)
